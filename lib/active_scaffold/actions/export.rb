@@ -47,37 +47,71 @@ module ActiveScaffold::Actions
         params.merge!(options)
       end
 
-      find_items_for_export
+      # this is required if you want this to work with IE
+      if request.env['HTTP_USER_AGENT'] =~ /msie/i
+        response.headers['Pragma'] = "public"
+        response.headers['Cache-Control'] = "no-cache, must-revalidate, post-check=0, pre-check=0"
+        response.headers['Expires'] = "0"
+      end
 
+      response.headers['Content-type'] = Mime::CSV
       response.headers['Content-Disposition'] = "attachment; filename=#{export_file_name}"
-      render :partial => 'export', :layout => false, :content_type => Mime::CSV, :status => response_status
+
+      # start streaming output
+      render :text => proc { |response, output|
+        find_items_for_export do
+          erase_render_results
+          str = render_to_string :partial => 'export', :layout => false
+          output.write(str)
+          params[:skip_header] = 'true' # skip header on the next run
+        end
+      }
     end
 
     protected
 
     # The actual algorithm to do the export
-    def find_items_for_export
+    def find_items_for_export(&block)
       export_config = active_scaffold_config.export
       export_columns = export_config.columns.reject { |col| params[:export_columns][col.name.to_sym].nil? }
 
       includes_for_export_columns = export_columns.collect{ |col| col.includes }.flatten.uniq.compact
       self.active_scaffold_joins.concat includes_for_export_columns
 
-      find_options = { :sorting => active_scaffold_config.list.user.sorting }
+      find_options = { :sorting => 
+        active_scaffold_config.list.user.sorting.nil? ?
+          active_scaffold_config.list.sorting : active_scaffold_config.list.user.sorting
+      }
       params[:search] = session[:search]
       do_search rescue nil
       params[:segment_id] = session[:segment_id]
       do_segment_search rescue nil
-      unless params[:full_download] == 'true'
+      @export_config = export_config
+      @export_columns = export_columns
+      if params[:full_download] == 'true'
+        find_options.merge!({
+          :per_page => 10000,
+          :page => 1
+        })
+        page = find_page(find_options)
+        unless page.nil?
+          pager = page.pager
+          pager.each do |page|
+            @records = page.items
+            yield
+          end
+        else
+          @records = page.items
+          yield
+        end
+      else
         find_options.merge!({
           :per_page => active_scaffold_config.list.user.per_page,
           :page => active_scaffold_config.list.user.page
         })
+        @records = find_page(find_options).items
+        yield
       end
-
-      @export_config = export_config
-      @export_columns = export_columns
-      @records = find_page(find_options).items
     end
 
     # The default name of the downloaded file.
