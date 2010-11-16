@@ -1,6 +1,6 @@
 # Need to open the AS module carefully due to Rails 2.3 lazy loading
 ActiveScaffold::Config::Core.class_eval do
-  # For some note obvious reasons, the class variables need to be defined
+  # For some unobvious reasons, the class variables need to be defined
   # *before* the cattr !!
   @@export_show_form = true
   @@export_allow_full_download = true
