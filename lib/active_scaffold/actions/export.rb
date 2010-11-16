@@ -85,10 +85,6 @@ module ActiveScaffold::Actions
       @export_config = export_config
       @export_columns = export_columns
       if params[:full_download] == 'true'
-        find_options.merge!({
-          :per_page => 10000,
-          :page => 1
-        })
         page = find_page(find_options)
         unless page.nil?
           pager = page.pager
