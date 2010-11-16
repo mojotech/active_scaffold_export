@@ -53,9 +53,15 @@ module ActiveScaffold::Actions
       response.headers['Content-type'] = Mime::CSV
       response.headers['Content-Disposition'] = "attachment; filename=#{export_file_name}"
 
+      @export_columns = export_config.columns.reject { |col| params[:export_columns][col.name.to_sym].nil? }
+      includes_for_export_columns = @export_columns.collect{ |col| col.includes }.flatten.uniq.compact
+      self.active_scaffold_includes.concat includes_for_export_columns
+      @export_config = export_config
+
       # start streaming output
       render :text => proc { |response, output|
-        find_items_for_export do
+        find_items_for_export do |records|
+          @records = records
           erase_render_results
           str = render_to_string :partial => 'export', :layout => false
           output.write(str)
@@ -65,15 +71,8 @@ module ActiveScaffold::Actions
     end
 
     protected
-
     # The actual algorithm to do the export
     def find_items_for_export(&block)
-      export_config = active_scaffold_config.export
-      export_columns = export_config.columns.reject { |col| params[:export_columns][col.name.to_sym].nil? }
-
-      includes_for_export_columns = export_columns.collect{ |col| col.includes }.flatten.uniq.compact
-      self.active_scaffold_includes.concat includes_for_export_columns
-
       find_options = { :sorting =>
         active_scaffold_config.list.user.sorting.nil? ?
           active_scaffold_config.list.sorting : active_scaffold_config.list.user.sorting
@@ -82,24 +81,21 @@ module ActiveScaffold::Actions
       do_search rescue nil
       params[:segment_id] = session[:segment_id]
       do_segment_search rescue nil
-      @export_config = export_config
-      @export_columns = export_columns
+
       if params[:full_download] == 'true'
         find_options.merge!({
           :per_page => 10000,
           :page => 1
         })
         find_page(find_options).pager.each do |page|
-          @records = page.items
-          yield
+          yield page.items
         end
       else
         find_options.merge!({
           :per_page => active_scaffold_config.list.user.per_page,
           :page => active_scaffold_config.list.user.page
         })
-        @records = find_page(find_options).items
-        yield
+        yield find_page(find_options).items
       end
     end
 
