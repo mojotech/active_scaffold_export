@@ -18,8 +18,5 @@ rescue
   raise $! unless Rails.env == 'production'
 end
 
-# Add the csv mime type
-#Mime::Type.register 'text/csv', :csv
-
 # Register our helper methods
 ActionView::Base.send(:include, ActiveScaffold::Helpers::ExportHelpers)
