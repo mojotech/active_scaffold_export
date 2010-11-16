@@ -53,27 +53,42 @@ module ActiveScaffold::Actions
       response.headers['Content-type'] = Mime::CSV
       response.headers['Content-Disposition'] = "attachment; filename=#{export_file_name}"
 
+      export_columns = export_config.columns.reject { |col| params[:export_columns][col.name.to_sym].nil? }
+      includes_for_export_columns = export_columns.collect{ |col| col.includes }.flatten.uniq.compact
+      self.active_scaffold_includes.concat includes_for_export_columns
+
+      fcsv_options = csv_export_options(export_config, export_columns)
+
       # start streaming output
       render :text => proc { |response, output|
-        find_items_for_export do
-          erase_render_results
-          str = render_to_string :partial => 'export', :layout => false
-          output.write(str)
+        find_items_for_export do |records|
+          output.write(generate_csv(records, fcsv_options, export_columns))
           params[:skip_header] = 'true' # skip header on the next run
         end
       }
     end
 
     protected
+    def generate_csv(records, fcsv_options, export_columns)
+      FasterCSV.generate(fcsv_options) do |csv|
+        csv << fcsv_options[:headers] unless params[:skip_header] == 'true'
+        records.each do |record|
+          csv << export_columns.map { |c| get_export_column_value(record, c) }
+        end
+      end
+    end
+
+    def csv_export_options(export_config, export_columns)
+      {
+        :row_sep => "\n",
+        :col_sep => params[:delimiter],
+        :force_quotes => export_config.force_quotes,
+        :headers => export_columns.collect { |column| format_export_column_header_name(column) }
+      }
+    end
 
     # The actual algorithm to do the export
     def find_items_for_export(&block)
-      export_config = active_scaffold_config.export
-      export_columns = export_config.columns.reject { |col| params[:export_columns][col.name.to_sym].nil? }
-
-      includes_for_export_columns = export_columns.collect{ |col| col.includes }.flatten.uniq.compact
-      self.active_scaffold_includes.concat includes_for_export_columns
-
       find_options = { :sorting =>
         active_scaffold_config.list.user.sorting.nil? ?
           active_scaffold_config.list.sorting : active_scaffold_config.list.user.sorting
@@ -82,20 +97,17 @@ module ActiveScaffold::Actions
       do_search rescue nil
       params[:segment_id] = session[:segment_id]
       do_segment_search rescue nil
-      @export_config = export_config
-      @export_columns = export_columns
+
       if params[:full_download] == 'true'
         find_page(find_options).pager.each do |page|
-          @records = page.items
-          yield
+          yield page.items
         end
       else
         find_options.merge!({
           :per_page => active_scaffold_config.list.user.per_page,
           :page => active_scaffold_config.list.user.page
         })
-        @records = find_page(find_options).items
-        yield
+        yield find_page(find_options).items
       end
     end
 
