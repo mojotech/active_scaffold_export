@@ -74,7 +74,7 @@ module ActiveScaffold::Actions
       includes_for_export_columns = export_columns.collect{ |col| col.includes }.flatten.uniq.compact
       self.active_scaffold_includes.concat includes_for_export_columns
 
-      find_options = { :sorting => 
+      find_options = { :sorting =>
         active_scaffold_config.list.user.sorting.nil? ?
           active_scaffold_config.list.sorting : active_scaffold_config.list.user.sorting
       }
@@ -85,14 +85,7 @@ module ActiveScaffold::Actions
       @export_config = export_config
       @export_columns = export_columns
       if params[:full_download] == 'true'
-        page = find_page(find_options)
-        unless page.nil?
-          pager = page.pager
-          pager.each do |page|
-            @records = page.items
-            yield
-          end
-        else
+        find_page(find_options).pager.each do |page|
           @records = page.items
           yield
         end
