@@ -14,7 +14,7 @@ module ActiveScaffold::Config
 
     # configures where the plugin itself is located. there is no instance version of this.
     cattr_accessor :plugin_directory
-    @@plugin_directory = File.expand_path(__FILE__).match(/vendor\/plugins\/([^\/]*)/)[1]
+    @@plugin_directory = File.expand_path(__FILE__).match(%{(^.*)/lib/active_scaffold/config/export.rb})[1]
 
 
     # instance-level configuration
