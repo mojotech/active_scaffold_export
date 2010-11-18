@@ -50,7 +50,7 @@ module ActiveScaffold::Actions
         response.headers['Expires'] = "0"
       end
 
-      response.headers['Content-type'] = Mime::CSV
+      response.headers['Content-type'] = 'text/csv'
       response.headers['Content-Disposition'] = "attachment; filename=#{export_file_name}"
 
       @export_columns = export_config.columns.reject { |col| params[:export_columns][col.name.to_sym].nil? }
