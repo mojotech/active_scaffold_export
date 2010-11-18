@@ -62,7 +62,6 @@ module ActiveScaffold::Actions
       self.response_body = proc { |response, output|
         find_items_for_export do |records|
           @records = records
-          erase_render_results
           str = render_to_string :partial => 'export', :layout => false
           output.write(str)
           params[:skip_header] = 'true' # skip header on the next run
