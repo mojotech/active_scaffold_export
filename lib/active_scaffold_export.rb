@@ -1,3 +1,4 @@
+require 'active_scaffold' rescue nil
 # Make sure that ActiveScaffold has already been included
 ActiveScaffold rescue throw "should have included ActiveScaffold plug in first.  Please make sure that this plug-in comes alphabetically after the ActiveScaffold plug-in"
 
