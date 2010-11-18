@@ -46,7 +46,7 @@ module ActiveScaffold
 
       def format_plural_association_export_column(association_records)
         firsts = association_records.first(4).collect { |v| v.to_label }
-        firsts[3] = '…' if firsts.length == 4
+        firsts[4] = "â€¦" if firsts.length == 4
         format_value(firsts.join(','))
       end
 
