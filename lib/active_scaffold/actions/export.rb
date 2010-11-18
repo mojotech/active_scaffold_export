@@ -59,7 +59,7 @@ module ActiveScaffold::Actions
       @export_config = export_config
 
       # start streaming output
-      render :text => proc { |response, output|
+      self.response_body = proc { |response, output|
         find_items_for_export do |records|
           @records = records
           erase_render_results
