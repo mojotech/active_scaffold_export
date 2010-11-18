@@ -12,10 +12,12 @@ require "#{File.dirname(__FILE__)}/active_scaffold/helpers/export_helpers.rb"
 ## Run the install script, too, just to make sure
 ## But at least rescue the action in production
 ##
-begin
-  require File.dirname(__FILE__) + '/../install'
-rescue
-  raise $! unless Rails.env == 'production'
+Rails::Application.initializer("active_scaffold_export_install_assets") do
+  begin
+    require File.dirname(__FILE__) + '/../install'
+  rescue
+    raise $! unless Rails.env == 'production'
+  end
 end
 
 # Register our helper methods
