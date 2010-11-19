@@ -74,7 +74,8 @@ module ActiveScaffold::Actions
     def find_items_for_export(&block)
       find_options = { :sorting =>
         active_scaffold_config.list.user.sorting.nil? ?
-          active_scaffold_config.list.sorting : active_scaffold_config.list.user.sorting
+          active_scaffold_config.list.sorting : active_scaffold_config.list.user.sorting,
+        :pagination => true
       }
       params[:search] = session[:search]
       do_search rescue nil
