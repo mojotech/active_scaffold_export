@@ -32,6 +32,6 @@ Gem::Specification.new do |s|
   else
     s.add_dependency(%q<fastercsv>, [">= 0"])
   end
-  s.add_dependency("active_scaffold")
+  s.add_dependency("active_scaffold", ">= 3.0.5")
 end
 

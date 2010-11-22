@@ -27,7 +27,7 @@ end
 ##
 Rails::Application.initializer("active_scaffold_export_install_assets") do
   begin
-    require File.dirname(__FILE__) + '/../install'
+    ActiveScaffold.install_assets_from(File.dirname(__FILE__) + "/..")
   rescue
     raise $! unless Rails.env == 'production'
   end
