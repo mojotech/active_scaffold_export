@@ -5,10 +5,21 @@ ActiveScaffold rescue throw "should have included ActiveScaffold plug in first. 
 
 # Load our overrides
 require "#{File.dirname(__FILE__)}/active_scaffold_export/config/core.rb"
-require "#{File.dirname(__FILE__)}/active_scaffold/config/export.rb"
-require "#{File.dirname(__FILE__)}/active_scaffold/actions/export.rb"
 require "#{File.dirname(__FILE__)}/active_scaffold/helpers/view_helpers_override.rb"
-require "#{File.dirname(__FILE__)}/active_scaffold/helpers/export_helpers.rb"
+
+module ActiveScaffold
+  module Actions
+    autoload :Export, "active_scaffold/actions/export"
+  end
+
+  module Config
+    autoload :Export, "active_scaffold/config/export"
+  end
+
+  module Helpers
+    autoload :ExportHelpers, "active_scaffold/helpers/export_helpers"
+  end
+end
 
 ##
 ## Run the install script, too, just to make sure
