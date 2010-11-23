@@ -25,7 +25,8 @@ end
 ## Run the install script, too, just to make sure
 ## But at least rescue the action in production
 ##
-Rails::Application.initializer("active_scaffold_export_install_assets") do
+Rails::Application.initializer("active_scaffold_export.install_assets",
+  :after => "active_scaffold.install_assets") do
   begin
     ActiveScaffold.install_assets_from(File.dirname(__FILE__) + "/..")
   rescue
