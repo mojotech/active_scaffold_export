@@ -5,7 +5,6 @@ ActiveScaffold rescue throw "should have included ActiveScaffold plug in first. 
 
 # Load our overrides
 require "active_scaffold_export/config/core.rb"
-require "active_scaffold/helpers/view_helpers_override.rb"
 
 module ActiveScaffoldExport
   def self.root
