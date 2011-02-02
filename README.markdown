@@ -62,4 +62,4 @@ Note on Patches/Pull Requests
 Copyright
 ---------
 
-Copyright (c) 2010 Mojo Tech, LLC. See LICENSE for details.
+Copyright (c) 2010 Mojo Tech, LLC. See MIT-LICENSE for details.

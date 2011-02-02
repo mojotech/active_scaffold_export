@@ -13,13 +13,11 @@ Gem::Specification.new do |s|
   s.description = %q{This Active Scaffold plugin provides a configurable CSV 'Export' action for Active Scaffold controllers}
   s.email = %q{activescaffold@googlegroups.com}
   s.extra_rdoc_files = [
-    "LICENSE.txt",
     "README.markdown"
   ]
   s.files = [
     ".document",
     "Gemfile",
-    "LICENSE.txt",
     "MIT-LICENSE",
     "README.markdown",
     "Rakefile",
