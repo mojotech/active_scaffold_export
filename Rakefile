@@ -22,7 +22,7 @@ Jeweler::Tasks.new do |gem|
   gem.description = %Q{This Active Scaffold plugin provides a configurable CSV 'Export' action for Active Scaffold controllers}
   gem.email = "activescaffold@googlegroups.com"
   gem.authors = ["Volker Hochstein", "Mojo Tech, LLC", "see commits"]
-  gem.add_runtime_dependency 'active_scaffold', '>= 3.0.11'
+  gem.add_runtime_dependency 'active_scaffold', '>= 3.0.12'
   gem.add_runtime_dependency "fastercsv"
 
   # Include your dependencies below. Runtime dependencies are required when using your gem,

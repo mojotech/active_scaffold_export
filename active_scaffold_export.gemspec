@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{active_scaffold_export}
-  s.version = "3.0.4"
+  s.version = "3.0.5"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Volker Hochstein", "Mojo Tech, LLC", "see commits"]
@@ -52,14 +52,14 @@ Gem::Specification.new do |s|
       s.add_development_dependency(%q<bundler>, ["~> 1.0.0"])
       s.add_development_dependency(%q<jeweler>, ["~> 1.5.2"])
       s.add_development_dependency(%q<rcov>, [">= 0"])
-      s.add_runtime_dependency(%q<active_scaffold>, [">= 3.0.11"])
+      s.add_runtime_dependency(%q<active_scaffold>, [">= 3.0.12"])
       s.add_runtime_dependency(%q<fastercsv>, [">= 0"])
     else
       s.add_dependency(%q<shoulda>, [">= 0"])
       s.add_dependency(%q<bundler>, ["~> 1.0.0"])
       s.add_dependency(%q<jeweler>, ["~> 1.5.2"])
       s.add_dependency(%q<rcov>, [">= 0"])
-      s.add_dependency(%q<active_scaffold>, [">= 3.0.11"])
+      s.add_dependency(%q<active_scaffold>, [">= 3.0.12"])
       s.add_dependency(%q<fastercsv>, [">= 0"])
     end
   else
@@ -67,7 +67,7 @@ Gem::Specification.new do |s|
     s.add_dependency(%q<bundler>, ["~> 1.0.0"])
     s.add_dependency(%q<jeweler>, ["~> 1.5.2"])
     s.add_dependency(%q<rcov>, [">= 0"])
-    s.add_dependency(%q<active_scaffold>, [">= 3.0.11"])
+    s.add_dependency(%q<active_scaffold>, [">= 3.0.12"])
     s.add_dependency(%q<fastercsv>, [">= 0"])
   end
 end
