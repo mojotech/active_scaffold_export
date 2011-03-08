@@ -23,8 +23,9 @@ Jeweler::Tasks.new do |gem|
   gem.email = "activescaffold@googlegroups.com"
   gem.authors = ["Volker Hochstein", "Mojo Tech, LLC", "see commits"]
   gem.add_runtime_dependency 'active_scaffold', '>= 3.0.12'
-  gem.add_runtime_dependency "fastercsv"
-
+  if RUBY_VERSION < "1.9"
+    gem.add_runtime_dependency "fastercsv"
+  end
   # Include your dependencies below. Runtime dependencies are required when using your gem,
   # and development dependencies are only needed for development (ie running rake tasks, tests, etc)
   #  gem.add_runtime_dependency 'jabber4r', '> 0.1'

@@ -1,4 +1,17 @@
-require 'fastercsv'
+require "csv"
+if CSV.const_defined? :Reader
+  # Ruby 1.8 compatible
+  begin
+    require 'fastercsv'
+    Object.send(:remove_const, :CSV)
+    CSV = FasterCSV
+  rescue Gem::LoadError
+    raise "For ruby 1.8, the 'fastercsv' gem is required"
+  end
+else
+  # CSV is now FasterCSV in ruby 1.9
+end
+
 # Make sure that ActiveScaffold has already been included
 ActiveScaffold rescue throw "should have included ActiveScaffold plug in first.  Please make sure that this plug-in comes alphabetically after the ActiveScaffold plug-in"
 
