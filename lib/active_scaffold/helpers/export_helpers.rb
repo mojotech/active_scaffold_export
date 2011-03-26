@@ -1,3 +1,5 @@
+# coding: utf-8
+
 module ActiveScaffold
   module Helpers
     # Helpers that assist with the rendering of a Export Column
@@ -11,7 +13,6 @@ module ActiveScaffold
       def active_scaffold_stylesheets_with_export(frontend = :default)
         active_scaffold_stylesheets_without_export.to_a << ActiveScaffold::Config::Core.asset_path("export-stylesheet.css", frontend)
       end
-      
 
       # Provides stylesheets for IE to include with +stylesheet_link_tag+
       def active_scaffold_ie_stylesheets_with_export(frontend = :default)
